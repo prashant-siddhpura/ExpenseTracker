@@ -1,14 +1,29 @@
-import React, { useContext } from "react";
-import { GlobalContext } from "../context/GlobalState";
+// src/components/Balance.js
+import React, { useContext } from 'react';
+import { GlobalContext } from '../context/GlobalState';
+
 export const Balance = () => {
   const { transactions } = useContext(GlobalContext);
-  const amounts = transactions.map((transaction) => transaction.amount);
 
-  const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
+  // Calculate income
+  const income = transactions
+    .filter((transaction) => transaction.type === 'income')
+    .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+  // Calculate expenses
+  const expenses = transactions
+    .filter((transaction) => transaction.type === 'expense')
+    .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+  // Balance is income minus expenses
+  const total = (income - expenses).toFixed(2);
+
   return (
-    <>
+    <div className="text-center">
       <h4>Your Balance</h4>
-      <h1>${total}</h1>
-    </>
+      <h1 className="text-4xl font-semibold dark:text-white balance-total">
+        ${total}
+      </h1>
+    </div>
   );
 };

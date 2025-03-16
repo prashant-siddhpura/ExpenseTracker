@@ -1,11 +1,14 @@
-import React, { useState, useContext } from "react";
-import { GlobalContext } from "../context/GlobalState";
+// src/components/AddTransaction.js
+import React, { useState, useContext } from 'react';
+import { GlobalContext } from '../context/GlobalState';
 
 export const AddTransaction = () => {
-  const [text, setText] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [text, setText] = useState('');
+  const [amount, setAmount] = useState('');
+  const [type, setType] = useState('income');
+  const [category, setCategory] = useState('');
 
-  const { addTransaction } = useContext(GlobalContext);
+  const { addTransaction, categories } = useContext(GlobalContext);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -13,38 +16,65 @@ export const AddTransaction = () => {
     const newTransaction = {
       id: Math.floor(Math.random() * 100000000),
       text,
-      amount: +amount,
+      amount: parseFloat(amount),
+      type,
+      category,
+      date: new Date().toISOString(), // Date is set to current time
     };
 
+    console.log('Adding transaction:', newTransaction); // Debug log
     addTransaction(newTransaction);
+    setText('');
+    setAmount('');
+    setCategory('');
   };
 
   return (
     <>
-      <h3>Add new transaction</h3>
+      <h3>Add New Transaction</h3>
       <form onSubmit={onSubmit}>
-        <div className="form-control">
-          <label htmlFor="text">Text</label>
+        <div>
+          <label htmlFor="text">Description</label>
           <input
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Enter text..."
+            placeholder="Enter description..."
+            required
           />
         </div>
-        <div className="form-control">
-          <label htmlFor="amount">
-            Amount <br />
-            (negative - expense, positive - income)
-          </label>
+        <div>
+          <label htmlFor="amount">Amount</label>
           <input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Enter amount..."
+            step="0.01"
+            required
           />
         </div>
-        <button className="btn">Add transaction</button>
+        <div>
+          <label htmlFor="type">Type</label>
+          <select value={type} onChange={(e) => setType(e.target.value)}>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="category">Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          >
+            <option value="">Select Category</option>
+            {(type === 'income' ? categories.income : categories.expense).map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
+        <button className="btn">Add Transaction</button>
       </form>
     </>
   );

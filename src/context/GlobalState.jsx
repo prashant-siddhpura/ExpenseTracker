@@ -1,38 +1,78 @@
-import React, { createContext, useReducer } from 'react';
+// src/context/GlobalState.js
+import React, { createContext, useReducer, useEffect } from 'react';
 import AppReducer from './AppReducer';
 
-// Initial state
 const initialState = {
-  transactions: []
-}
+  transactions: JSON.parse(localStorage.getItem('transactions')) || [],
+  categories: {
+    income: ['Salary', 'Freelance', 'Investment', 'Other'],
+    expense: ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping', 'Other'],
+  },
+  viewMode: 'home', // "home" or "monthly"
+  selectedMonth: new Date().getMonth(), // 0-11 (January is 0)
+  selectedYear: new Date().getFullYear(), // Current year
+};
 
-// Create context
 export const GlobalContext = createContext(initialState);
 
-// Provider component
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  // Actions
+  useEffect(() => {
+    localStorage.setItem('transactions', JSON.stringify(state.transactions));
+  }, [state.transactions]);
+
   function deleteTransaction(id) {
     dispatch({
       type: 'DELETE_TRANSACTION',
-      payload: id
+      payload: id,
     });
   }
 
   function addTransaction(transaction) {
     dispatch({
       type: 'ADD_TRANSACTION',
-      payload: transaction
+      payload: transaction,
     });
   }
 
-  return (<GlobalContext.Provider value={{
-    transactions: state.transactions,
-    deleteTransaction,
-    addTransaction
-  }}>
-    {children}
-  </GlobalContext.Provider>);
-}
+  function setViewMode(mode) {
+    dispatch({
+      type: 'SET_VIEW_MODE',
+      payload: mode,
+    });
+  }
+
+  function setSelectedMonth(month) {
+    dispatch({
+      type: 'SET_SELECTED_MONTH',
+      payload: month,
+    });
+  }
+
+  function setSelectedYear(year) {
+    dispatch({
+      type: 'SET_SELECTED_YEAR',
+      payload: year,
+    });
+  }
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        transactions: state.transactions,
+        categories: state.categories,
+        viewMode: state.viewMode,
+        selectedMonth: state.selectedMonth,
+        selectedYear: state.selectedYear,
+        deleteTransaction,
+        addTransaction,
+        setViewMode,
+        setSelectedMonth,
+        setSelectedYear,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
