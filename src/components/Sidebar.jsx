@@ -1,10 +1,8 @@
 // src/components/Sidebar.js
-import React, { useContext } from 'react';
-import { GlobalContext } from '../context/GlobalState';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Sidebar = () => {
-  const { setViewMode } = useContext(GlobalContext);
-
   return (
     <div className="sidebar">
       <div className="mb-8 text-center">
@@ -13,20 +11,36 @@ export const Sidebar = () => {
       <nav>
         <ul>
           <li>
-            <button
-              className="w-full text-left py-2 px-4 hover:bg-gray-700 rounded transition-colors"
-              onClick={() => setViewMode('home')}
+            <Link
+              to="/"
+              className="w-full text-left py-2 px-4 hover:bg-gray-700 rounded transition-colors block text-white"
             >
               Home
-            </button>
+            </Link>
           </li>
           <li>
-            <button
-              className="w-full text-left py-2 px-4 hover:bg-gray-700 rounded transition-colors"
-              onClick={() => setViewMode('monthly')}
+            <Link
+              to="/monthly"
+              className="w-full text-left py-2 px-4 hover:bg-gray-700 rounded transition-colors block text-white"
             >
               Monthly Report
-            </button>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/add-transaction"
+              className="w-full text-left py-2 px-4 hover:bg-gray-700 rounded transition-colors block text-white"
+            >
+              Add Transaction
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/history"
+              className="w-full text-left py-2 px-4 hover:bg-gray-700 rounded transition-colors block text-white"
+            >
+              History
+            </Link>
           </li>
         </ul>
       </nav>

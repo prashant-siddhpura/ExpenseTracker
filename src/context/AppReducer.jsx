@@ -1,3 +1,4 @@
+// src/context/AppReducer.js
 export default (state, action) => {
   switch (action.type) {
     case 'DELETE_TRANSACTION':
@@ -12,15 +13,6 @@ export default (state, action) => {
         ...state,
         transactions: [action.payload, ...state.transactions],
       };
-    case 'EDIT_TRANSACTION':
-      return {
-        ...state,
-        transactions: state.transactions.map((transaction) =>
-          transaction.id === action.payload.id ? action.payload : transaction
-        ),
-      };
-    case 'SET_VIEW_MODE':
-      return { ...state, viewMode: action.payload };
     case 'SET_SELECTED_MONTH':
       return { ...state, selectedMonth: action.payload };
     case 'SET_SELECTED_YEAR':

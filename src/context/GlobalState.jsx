@@ -8,9 +8,8 @@ const initialState = {
     income: ['Salary', 'Freelance', 'Investment', 'Other'],
     expense: ['Food', 'Transport', 'Entertainment', 'Bills', 'Shopping', 'Other'],
   },
-  viewMode: 'home', // "home" or "monthly"
-  selectedMonth: new Date().getMonth(), // 0-11 (January is 0)
-  selectedYear: new Date().getFullYear(), // Current year
+  selectedMonth: new Date().getMonth(),
+  selectedYear: new Date().getFullYear(),
 };
 
 export const GlobalContext = createContext(initialState);
@@ -36,13 +35,6 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
-  function setViewMode(mode) {
-    dispatch({
-      type: 'SET_VIEW_MODE',
-      payload: mode,
-    });
-  }
-
   function setSelectedMonth(month) {
     dispatch({
       type: 'SET_SELECTED_MONTH',
@@ -62,12 +54,10 @@ export const GlobalProvider = ({ children }) => {
       value={{
         transactions: state.transactions,
         categories: state.categories,
-        viewMode: state.viewMode,
         selectedMonth: state.selectedMonth,
         selectedYear: state.selectedYear,
         deleteTransaction,
         addTransaction,
-        setViewMode,
         setSelectedMonth,
         setSelectedYear,
       }}
