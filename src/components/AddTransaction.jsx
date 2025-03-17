@@ -23,8 +23,10 @@ export const AddTransaction = () => {
       date: new Date().toISOString(),
     };
 
-    console.log('Adding transaction:', newTransaction);
+    // Add the transaction to context
     addTransaction(newTransaction);
+
+    // Reset form
     setText('');
     setAmount('');
     setCategory('');
@@ -78,7 +80,9 @@ export const AddTransaction = () => {
                 ))}
               </select>
             </div>
-            <button className="btn">Add Transaction</button>
+            <button className="btn" type="submit">
+              Add Transaction
+            </button>
           </form>
         </div>
       </div>
