@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
 import { Transaction } from './Transaction';
+import { Header } from './Header';
 
 export const MonthlyReport = () => {
   const {
@@ -42,74 +43,146 @@ export const MonthlyReport = () => {
   );
 
   return (
-    <>
-      <div className="flex justify-center mb-6">
-        <div className="flex space-x-4">
-          <div>
-            <label htmlFor="month" className="block mb-1 font-medium">
-              Month
-            </label>
-            <select
-              id="month"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-              className="border rounded p-2"
-            >
-              {months.map((month, index) => (
-                <option key={index} value={index}>
-                  {month}
-                </option>
-              ))}
-            </select>
+    // <>
+    //   <div className="flex justify-center mb-6">
+    //     <div className="flex space-x-4">
+    //       <div>
+    //         <label htmlFor="month" className="block mb-1 font-medium">
+    //           Month
+    //         </label>
+    //         <select
+    //           id="month"
+    //           value={selectedMonth}
+    //           onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+    //           className="border rounded p-2"
+    //         >
+    //           {months.map((month, index) => (
+    //             <option key={index} value={index}>
+    //               {month}
+    //             </option>
+    //           ))}
+    //         </select>
+    //       </div>
+    //       <div>
+    //         <label htmlFor="year" className="block mb-1 font-medium">
+    //           Year
+    //         </label>
+    //         <select
+    //           id="year"
+    //           value={selectedYear}
+    //           onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+    //           className="border rounded p-2"
+    //         >
+    //           {years.map((year) => (
+    //             <option key={year} value={year}>
+    //               {year}
+    //             </option>
+    //           ))}
+    //         </select>
+    //       </div>
+    //     </div>
+    //   </div>
+
+    //   <div className="text-center">
+    //     <h4>Monthly Balance</h4>
+    //     <h1 className="text-4xl font-semibold text-gray-800">${balance}</h1>
+    //   </div>
+
+    //   <div className="inc-exp-container">
+    //     <div>
+    //       <h4>Income</h4>
+    //       <p className="money plus">${income}</p>
+    //     </div>
+    //     <div>
+    //       <h4>Expense</h4>
+    //       <p className="money minus">${expense}</p>
+    //     </div>
+    //   </div>
+
+    //   <h3>Transactions for {months[selectedMonth]} {selectedYear}</h3>
+    //   {filteredTransactions.length === 0 ? (
+    //     <p className="text-gray-500 italic">
+    //       No transactions for this month.
+    //     </p>
+    //   ) : (
+    //     <ul className="list">
+    //       {filteredTransactions.map((transaction) => (
+    //         <Transaction key={transaction.id} transaction={transaction} />
+    //       ))}
+    //     </ul>
+    //   )}
+    // </>
+    <div className="content-wrapper">
+      <Header />
+      <div className="container">
+        <div className="monthly-report-container">
+          <div className="flex justify-center mb-6">
+            <div className="flex space-x-4">
+              <div>
+                <label htmlFor="month" className="block mb-1 font-medium">
+                  Month
+                </label>
+                <select
+                  id="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                >
+                  {months.map((month, index) => (
+                    <option key={index} value={index}>
+                      {month}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="year" className="block mb-1 font-medium">
+                  Year
+                </label>
+                <select
+                  id="year"
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="year" className="block mb-1 font-medium">
-              Year
-            </label>
-            <select
-              id="year"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-              className="border rounded p-2"
-            >
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
+
+          <div className="text-center">
+            <h4>Monthly Balance</h4>
+            <h1>${balance}</h1>
           </div>
+
+          <div className="inc-exp-container">
+            <div>
+              <h4>Income</h4>
+              <p className="money plus">${income}</p>
+            </div>
+            <div>
+              <h4>Expense</h4>
+              <p className="money minus">${expense}</p>
+            </div>
+          </div>
+
+          <h3>Transactions for {months[selectedMonth]} {selectedYear}</h3>
+          {filteredTransactions.length === 0 ? (
+            <p className="text-gray-500 italic">
+              No transactions for this month.
+            </p>
+          ) : (
+            <ul className="list">
+              {filteredTransactions.map((transaction) => (
+                <Transaction key={transaction.id} transaction={transaction} />
+              ))}
+            </ul>
+          )}
         </div>
       </div>
-
-      <div className="text-center">
-        <h4>Monthly Balance</h4>
-        <h1 className="text-4xl font-semibold text-gray-800">${balance}</h1>
-      </div>
-
-      <div className="inc-exp-container">
-        <div>
-          <h4>Income</h4>
-          <p className="money plus">${income}</p>
-        </div>
-        <div>
-          <h4>Expense</h4>
-          <p className="money minus">${expense}</p>
-        </div>
-      </div>
-
-      <h3>Transactions for {months[selectedMonth]} {selectedYear}</h3>
-      {filteredTransactions.length === 0 ? (
-        <p className="text-gray-500 italic">
-          No transactions for this month.
-        </p>
-      ) : (
-        <ul className="list">
-          {filteredTransactions.map((transaction) => (
-            <Transaction key={transaction.id} transaction={transaction} />
-          ))}
-        </ul>
-      )}
-    </>
+    </div>
   );
 };
