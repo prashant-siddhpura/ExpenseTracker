@@ -1,126 +1,301 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+  --box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Adjusted for dark theme */
   --primary-color: #bb79b5;
   --income-color: #22c55e;
   --expense-color: #ef4444;
 }
-/* Dark mode variables */
-.dark {
-  --box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
-}
-.dark body {
+
+/* Global Styles (Dark Theme as Default) */
+html {
   background-color: #1f2937;
   color: #f9fafb;
+  
 }
 
-.dark .inc-exp-container,
-.dark .list li,
-.dark .add-transaction-container {
+
+body {
+  background-color: #1f2937;
+  font-family: 'Inter','Poppins','sans-sarif';
+  font-weight: 300;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+/* Containers */
+.inc-exp-container,
+.list li,
+.add-transaction-container,
+.budget-management-container,
+.monthly-report-container,
+.budget-item,
+.budget-progress-item {
   background-color: #374151;
   color: #f9fafb;
 }
-.dark .sidebar {
-  background-color: #111827; /* Darker shade for dark mode */
+
+/* Sidebar */
+.sidebar {
+  background-color: #111827;
+  width: 150px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 70px;
+  z-index: 10;
 }
-.dark h1,
-.dark h3,
-.dark label {
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin: 15px 0;
+}
+
+.sidebar nav ul li button {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  background: none;
+  border: none;
   color: #f9fafb;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.dark h4 {
-  color: #d1d5db;
-}
-
-.dark input[type='text'],
-.dark input[type='number'],
-.dark select {
+.sidebar nav ul li button:hover {
   background-color: #4b5563;
-  border-color: #6b7280;
-  color: #f9fafb;
 }
 
-.dark input[type='text']:focus,
-.dark input[type='number']:focus,
-.dark select:focus {
+/* Form Elements */
+input[type='text'],
+input[type='number'],
+input[type='file'],
+select,
+textarea {
+  border: 1px solid #6b7280;
+  border-radius: 6px;
+  display: block;
+  font-size: 15px;
+  padding: 10px;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  background-color: #4b5563;
+  color: #f9fafb;
+  transition: border-color 0.2s ease;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+input[type='file']:focus,
+select:focus {
+  outline: none;
   border-color: var(--primary-color);
 }
 
-.dark .list li .text-gray-500 {
-  color: #9ca3af;
+label {
+  display: inline-block;
+  margin: 8px 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #f9fafb;
 }
 
-.dark .list li .text-gray-700 {
+h1,
+h3,
+.budget-item span,
+.budget-progress-item span {
+  color: #f9fafb;
+}
+
+h4,
+.monthly-report-container .text-center h4 {
   color: #d1d5db;
 }
 
-/* Rest of your existing CSS remains the same */
+.text-gray-500 {
+  color: #9ca3af;
+}
+
+.text-gray-700 {
+  color: #d1d5db;
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  background-color: var(--primary-color);
+  box-shadow: var(--box-shadow);
+  color: #f9fafb;
+  border: 0;
+  font-size: 14px;
+  font-weight: 300;
+  margin: 20px 0 0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #4f46e5;
+}
+
+.delete-btn {
+  cursor: pointer;
+  background-color: var(--expense-color);
+  border: 0;
+  color: #f9fafb;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
+
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Progress Bar */
+.progress-bar {
+  flex: 2;
+  height: 10px;
+  background-color: #6b7280;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 0 10px;
+}
+
+.progress-bar div {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Reset and Base Styles */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  background-color: #f9fafb;
+/* Container for Main Content */
+.container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+/* Header Styles */
+header {
+  background-color: #283f5b;
+  color: #f9fafb;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
-  font-family: 'Poppins', sans-serif;
-  min-height: 100vh;
-  margin: 0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 60px;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 0;
 }
 
-.container {
-  margin: 0 auto;
-  width: 80vw;
-  padding: 0 20px;
-  max-width: 100%;
+header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #f9fafb;
 }
 
-h1 {
-  /* letter-spacing: 0.5px; */
-  /* font-weight: 800; */
-  color: #1f2937;
-}
-/* Force balance total to be black in light mode */
-.text-center h1.balance-total {
-  color: #1f2937 !important;
-}
-/* Force balance total to be white in dark mode */
-.dark .text-center h1.balance-total {
-  color: #ffffff !important;
+header .flex {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-h3 {
-  margin: 0px 0 15px;
-  font-size: large;
-  font-weight: 200;
-  color: #374151;
+header img {
+  border: 1px solid #6b7280; /* Matches dark theme border */
+  border-radius: 50%; /* Ensure circular image */
 }
 
-h4 {
-  margin-top: 20px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 400;
-  color: #6b7280;
+header span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f9fafb;
 }
 
+header button {
+  background: none;
+  border: none;
+  color: #f9fafb;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+header button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+header button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Main Content Wrapper */
+.content-wrapper {
+  margin-left: 100px;
+  margin-top: 60px;
+  padding: 20x;
+  width: calc(100% - 150px);
+  min-height: calc(100vh - 70px);
+}
+
+/* Income/Expense Container */
 .inc-exp-container {
-  background-color: #ffffff;
   box-shadow: var(--box-shadow);
   padding: 16px;
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
-  margin-left: 15vw;
   border-radius: 16px;
-  width: 50vw;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .inc-exp-container > div {
@@ -129,7 +304,7 @@ h4 {
 }
 
 .inc-exp-container > div:first-of-type {
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid #6b7280; /* Adjusted for dark theme */
 }
 
 .money {
@@ -147,60 +322,7 @@ h4 {
   color: var(--expense-color);
 }
 
-label {
-  display: inline-block;
-  margin: 8px 0px 0px;
-  font-size: 12px;
-  font-weight: 400;
-  color: #374151;
-}
-
-input[type='text'],
-input[type='number'],
-select {
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  display: block;
-  font-size: 15px;
-  padding: 10px;
-  width: 100%;
-  font-family: 'Poppins', sans-serif;
-  background-color: #f9fafb;
-  transition: border-color 0.2s ease;
-}
-
-input[type='text']:focus,
-input[type='number']:focus,
-select:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
-
-.btn {
-  cursor: pointer;
-  background-color: var(--primary-color);
-  box-shadow: var(--box-shadow);
-  color: #fff;
-  border: 0;
-  display: block;
-  font-size: 14px;
-  font-weight: 300;
-  margin: 20px 0px 0px;
-  padding: 10px;
-  width: 100%;
-  border-radius: 16px;
-  transition: background-color 0.2s ease;
-}
-
-.btn:hover {
-  background-color: #4f46e5;
-}
-
-.btn:focus,
-.delete-btn:focus {
-  outline: 0;
-}
-
+/* Transaction List */
 .list {
   list-style-type: none;
   padding: 0;
@@ -208,22 +330,14 @@ select:focus {
 }
 
 .list li {
-  background-color: #fff;
   box-shadow: var(--box-shadow);
-  color: #333;
+  color: #f9fafb;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  position: relative;
-  padding: 6px 6px;
-  margin: 6px 0px;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
   border-radius: 8px;
-  transition: transform 0.1s ease;
-  flex-wrap: wrap;
-}
-
-.list li:hover {
-  transform: translateY(-2px);
 }
 
 .list li.plus {
@@ -234,104 +348,15 @@ select:focus {
   border-left: 4px solid var(--expense-color);
 }
 
-.list li .flex-1 {
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 75%;
-}
-
-.delete-btn {
-  cursor: pointer;
-  background-color: var(--expense-color);
-  border: 0;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-  margin-top: 4px;
-}
-
-.delete-btn:hover {
-  background-color: #dc2626;
-}
-
-.sidebar {
-  width: 150px;
-  background-color: #1f2937; /* Default dark gray */
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding-top: 20px;
-  transition: width 0.3s ease, background-color 0.3s ease;
-  z-index: 10;
-}
-
-.sidebar:hover {
-  width: 200px;
-}
-
-.sidebar nav ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar nav ul li {
-  margin: 20px 0;
-}
-
-.sidebar nav ul li button {
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.sidebar nav ul li button:hover {
-  background-color: #374151;
-}
-.dark .sidebar nav ul li button:hover {
-  background-color: #4b5563; /* Lighter gray hover in dark mode */
-}
-
-.content-wrapper {
-  margin-left: 150px;
-  transition: margin-left 0.3s ease;
-  width: calc(100% - 150px); /* Ensure content takes remaining width */
-}
-
-.sidebar:hover ~ .content-wrapper {
-  margin-left: 200px;
-  width: calc(100% - 200px); /* Adjust width when sidebar expands */
-}
-
-/* Style the Monthly Report container */
+/* Monthly Report Container */
 .monthly-report-container {
-  background-color: #ffffff;
   box-shadow: var(--box-shadow);
   padding: 24px;
   border-radius: 12px;
   margin: 30px auto;
-  max-width: 800px; /* Constrain width for better readability */
+  max-width: 800px;
 }
 
-.dark .monthly-report-container {
-  background-color: #374151;
-}
-
-/* Style the month/year dropdown section */
 .monthly-report-container .flex {
   display: flex;
   justify-content: center;
@@ -342,142 +367,205 @@ select:focus {
 .monthly-report-container select {
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background-color: #f9fafb;
+  border: 1px solid #6b7280;
+  background-color: #4b5563;
   font-size: 14px;
   font-family: 'Poppins', sans-serif;
-  transition: border-color 0.2s ease;
-}
-
-.dark .monthly-report-container select {
-  background-color: #4b5563;
-  border-color: #6b7280;
   color: #f9fafb;
 }
 
-.monthly-report-container select:focus {
-  border-color: var(--primary-color);
-  outline: none;
-}
-
-/* Style the monthly balance section */
 .monthly-report-container .text-center h4 {
   font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
-  margin-bottom: 8px;
-}
-
-.dark .monthly-report-container .text-center h4 {
   color: #d1d5db;
+  margin-bottom: 8px;
 }
 
 .monthly-report-container .text-center h1 {
   font-size: 36px;
   font-weight: 600;
-  color: #1f2937;
+  color: #f9fafb;
   margin-bottom: 24px;
 }
 
-.dark .monthly-report-container .text-center h1 {
-  color: #ffffff;
-}
-
-/* Style the income/expense container in MonthlyReport */
 .monthly-report-container .inc-exp-container {
-  margin: 0 auto; /* Center the container */
   width: 100%;
-  max-width: 400px; /* Constrain width */
-  background-color: #f1f5f9;
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow: var(--box-shadow);
-}
-
-.dark .monthly-report-container .inc-exp-container {
+  max-width: 400px;
+  margin: 0 auto;
   background-color: #4b5563;
 }
 
-/* Style the transactions list header */
 .monthly-report-container h3 {
   font-size: 20px;
   font-weight: 500;
-  color: #1f2937;
+  color: #f9fafb;
   margin: 24px 0 16px;
 }
 
-.dark .monthly-report-container h3 {
-  color: #f9fafb;
-}
-
-/* Ensure the transaction list doesn't overflow */
 .monthly-report-container .list {
   margin-bottom: 0;
 }
 
-
-.grid-container {
-  display: grid;
-  grid-template-columns: 50% 50%; /* Explicitly set to 100% for each column */
-  gap: 24px;
-  align-items: start;
-}
-
-.grid-container > div {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  width: 100%; /* Ensure each div takes full width */
-}
-
+/* Add Transaction Container */
 .add-transaction-container {
-  background-color: #fff;
   box-shadow: var(--box-shadow);
   padding: 20px;
   border-radius: 8px;
-  flex: 1;
   margin-top: 30px;
-  margin-left: 20px;
-  width: 100%; /* Ensure full width */
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Responsive adjustments */
+/* Budget Management Container */
+.budget-management-container {
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Budget Item */
+.budget-item {
+  box-shadow: var(--box-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.budget-item span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Budget Progress Item */
+.budget-progress-item {
+  box-shadow: var(--box-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.budget-progress-item > div {
+  flex: 1;
+}
+
+.budget-progress-item span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
+  .sidebar {
+    width: 100px;
+  }
   .content-wrapper {
-    margin-left: 150px;
-    width: calc(100% - 150px);
+    margin-left: 100px;
+    width: calc(100% - 100px);
+    margin-top: 60px;
   }
-
-  .sidebar:hover ~ .content-wrapper {
-    margin-left: 150px; /* Prevent sidebar hover on small screens */
-    width: calc(100% - 150px);
+  .inc-exp-container,
+  .monthly-report-container {
+    width: 100%;
+    max-width: 100%;
   }
-
   .monthly-report-container {
     padding: 16px;
   }
-
-  .monthly-report-container .inc-exp-container {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 320px) {
-  .container {
-    width: 100%;
+  header .container {
     padding: 10px;
   }
+}
 
-  .monthly-report-container {
-    margin: 20px 0;
+@media (max-width: 480px) {
+  .sidebar {
+    display: none;
+  }
+  .content-wrapper {
+    margin-left: 0;
+    margin-top: 60px;
+    width: 100%;
+  }
+  .inc-exp-container {
+    margin-left: 0;
+    width: 100%;
+  }
+  header .flex {
+    flex-direction: column;
+    gap: 10px;
   }
 }
 
+.login-button {
+  background-color: var(--primary-color);
+  transition: background-color 0.3s ease;
+}
+.login-button:hover {
+  background-color: #4f46e5;
+}
 
-@media (max-width: 320px) {
-  .container {
-    width: 300px;
-  }
+input::placeholder {
+  color: #d1d5db;
+  opacity: 1;
+}
+
+.bg-light-login {
+  background-color: #f9fafb; /* Light gray background */
+}
+
+.bg-light-login input[type='text'],
+.bg-light-login input[type='number'],
+.bg-light-login input[type='file'],
+.bg-light-login select,
+.bg-light-login textarea {
+  background-color: #ffffff; /* Lighter input background */
+  color: #1f2937; /* Dark text */
+  border-color: #d1d5db; /* Lighter border */
+}
+
+.bg-light-login label {
+  color: #1f2937; /* Dark label text */
+}
+
+
+
+/* newwwwww */
+
+
+
+/* ... (existing CSS) ... */
+
+/* Voice Button */
+.btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  background-color: #9ca3af;
+}
+
+/* App.css */
+.chart-container {
+  background-color: #374151;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.chart-container h3 {
+  color: #f9fafb;
+  font-size: 18px;
+  font-weight: 500;
 }

@@ -2,7 +2,7 @@
 import React, { useContext, useCallback } from 'react';
 import { Transaction } from './Transaction';
 import { GlobalContext } from '../context/GlobalState';
-import { Header } from './Header';
+
 import { writeFile, utils } from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -10,8 +10,7 @@ export const TransactionList = () => {
   const { transactions } = useContext(GlobalContext);
 
   const downloadExcel = useCallback(() => {
-    console.log('downloadExcel called');
-
+    
     // Format transactions with IST date
     const formattedTransactions = transactions.map((transaction) => {
       const date = new Date(transaction.date); // Parse ISO date
@@ -60,7 +59,7 @@ export const TransactionList = () => {
 
   return (
     <div className="content-wrapper">
-      <Header />
+      
       <div className="container">
         <h3 style={{marginTop: "20px" ,textAlign:"center" ,fontWeight:"600",fontSize:"25px"}}>History</h3>
         <button onClick={handleDownload} className="btn mb-4">
@@ -79,3 +78,5 @@ export const TransactionList = () => {
     </div>
   );
 };
+
+
