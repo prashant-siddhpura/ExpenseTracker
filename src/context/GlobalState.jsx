@@ -145,6 +145,23 @@ async function addTransaction(transaction) {
   }
 }
 
+async function bulkAddTransactions(transactions) {
+  try {
+    const token = await getIdToken(auth.currentUser);
+    const response = await axios.post(
+      "http://localhost:5000/api/transactions/bulk",
+      { transactions },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    response.data.forEach(transaction => {
+      dispatch({ type: "ADD_TRANSACTION", payload: transaction });
+    });
+  } catch (err) {
+    console.error("Error adding bulk transactions:", err);
+    throw err;
+  }
+}
+
 
 async function deleteTransaction(id) {
   const token = await getIdToken(auth.currentUser);
@@ -250,6 +267,7 @@ async function deleteTransaction(id) {
         budgets: state.budgets,
         userSettings: state.userSettings,
         isLoading,
+        bulkAddTransactions,
         updateUserSettings,
         deleteTransaction,
         addTransaction,

@@ -102,8 +102,10 @@ export const AddTransaction = () => {
   const [category, setCategory] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [parsedData, setParsedData] = useState(null);
+  const [file, setFile] = useState(null); // State for file upload
+  const [uploadStatus, setUploadStatus] = useState(''); // Feedback for upload
 
-  const { addTransaction, categories } = useContext(GlobalContext);
+  const { addTransaction, categories,bulkAddTransactions } = useContext(GlobalContext);
 
   // Initialize SpeechRecognition
   useEffect(() => {
@@ -220,6 +222,64 @@ export const AddTransaction = () => {
     setCategory('');
   };
 
+  // Handle file upload
+  const handleFileUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    if (uploadedFile && uploadedFile.type === 'text/plain') {
+      setFile(uploadedFile);
+      setUploadStatus('');
+    } else {
+      setFile(null);
+      setUploadStatus('Please upload a valid .txt file.');
+    }
+  };
+
+
+  const processFile = async () => {
+    if (!file) {
+      setUploadStatus('No file selected.');
+      return;
+    }
+  
+    setUploadStatus('Processing...');
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const text = e.target.result;
+        const lines = text.split('\n').filter(line => line.trim());
+        const dataLines = lines[0].includes('Description') ? lines.slice(1) : lines;
+        const transactions = dataLines.map((line, index) => {
+          const [text, amount, type, category, date] = line.split('|').map(item => item.trim());
+          if (!text || isNaN(amount) || !['income', 'expense'].includes(type) || !category) {
+            throw new Error(`Invalid data at line ${index + 2}: ${line}`);
+          }
+          const validCategories = type === 'income' ? categories.income : categories.expense;
+          if (!validCategories.includes(category)) {
+            throw new Error(`Invalid category "${category}" at line ${index + 2}`);
+          }
+          return {
+            text,
+            amount: parseFloat(amount),
+            type,
+            category,
+            date: date ? new Date(date).toISOString() : new Date().toISOString(),
+          };
+        });
+  
+        await bulkAddTransactions(transactions);
+        setUploadStatus(`${transactions.length} transactions added successfully!`);
+        setFile(null);
+      } catch (error) {
+        setUploadStatus(`Error: ${error.message}`);
+      }
+    };
+    reader.onerror = () => {
+      setUploadStatus('Error reading the file.');
+    };
+    reader.readAsText(file);
+  };
+
+
   return (
     <div className="content-wrapper">
       <Header />
@@ -280,6 +340,26 @@ export const AddTransaction = () => {
               Add Transaction
             </button>
           </form>
+          {/* Bulk Upload Section */}
+          <h3 className="mt-6">Bulk Upload Transactions</h3>
+          <div>
+            <label htmlFor="fileUpload">Upload Transaction File (.txt)</label>
+            <input
+              type="file"
+              id="fileUpload"
+              accept=".txt"
+              onChange={handleFileUpload}
+            />
+            <button
+              className="btn mt-2"
+              onClick={processFile}
+              disabled={!file}
+            >
+              Process File
+            </button>
+            {file && <p>Selected file: {file.name}</p>}
+            {uploadStatus && <p className="mt-2">{uploadStatus}</p>}
+          </div>
         </div>
       </div>
     </div>

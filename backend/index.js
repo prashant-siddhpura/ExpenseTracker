@@ -314,6 +314,48 @@ app.delete('/api/group-expenses/:id', verifyToken, async (req, res) => {
 });
 
 
+// Add a bulk transaction endpoint
+app.post('/api/transactions/bulk', verifyToken, async (req, res) => {
+  const transactions = req.body.transactions; // Expect an array of transactions
+  if (!Array.isArray(transactions) || transactions.length === 0) {
+    return res.status(400).json({ error: 'Transactions array is required' });
+  }
+
+  try {
+    const values = transactions.map(t => [
+      t.text,
+      parseFloat(t.amount),
+      t.type,
+      t.category,
+      formatDateForMySQL(t.date),
+      req.userId,
+    ]);
+
+    const query = `
+      INSERT INTO transactions (text, amount, type, category, date, user_id)
+      VALUES ?
+    `;
+    const [result] = await db.query(query, [values]);
+
+    const insertedIds = Array.from({ length: result.affectedRows }, (_, i) => result.insertId + i);
+    const response = transactions.map((t, i) => ({
+      id: insertedIds[i],
+      text: t.text,
+      amount: Number(t.amount),
+      type: t.type,
+      category: t.category,
+      date: formatDateForMySQL(t.date),
+      user_id: req.userId,
+    }));
+
+    res.status(201).json(response);
+  } catch (err) {
+    console.error('Error adding bulk transactions:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
