@@ -8,6 +8,11 @@ const multer = require('multer');
 
 dotenv.config();
 
+admin.initializeApp({
+  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)),
+});
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -356,7 +361,10 @@ app.post('/api/transactions/bulk', verifyToken, async (req, res) => {
 });
 
 
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// const PORT = 5000;
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
+
+// Add this:
+module.exports = app;
