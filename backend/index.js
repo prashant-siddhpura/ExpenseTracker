@@ -30,11 +30,11 @@ const upload = multer({
 
 // Database connection
 const db = mysql.createPool({
-  host: process.env.VITE_DB_HOST,
-  user: process.env.VITE_DB_USER,
-  password: process.env.VITE_DB_PASSWORD,
-  database: process.env.VITE_DB_DATABASE,
-  port: process.env.VITE_DB_PORT
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.DB_PORT
 });
 
 // Test database connection
