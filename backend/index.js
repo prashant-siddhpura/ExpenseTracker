@@ -8,9 +8,7 @@ const multer = require('multer');
 
 dotenv.config();
 
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)),
-});
+
 
 
 const app = express();
@@ -30,11 +28,11 @@ const upload = multer({
 
 // Database connection
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-  port: process.env.DB_PORT
+  host: process.env.VITE_DB_HOST,
+  user: process.env.VITE_DB_USER,
+  password: process.env.VITE_DB_PASSWORD,
+  database: process.env.VITE_DB_DATABASE,
+  port: process.env.VITE_DB_PORT
 });
 
 // Test database connection
@@ -361,10 +359,7 @@ app.post('/api/transactions/bulk', verifyToken, async (req, res) => {
 });
 
 
-// const PORT = 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
-
-// Add this:
-module.exports = app;
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
