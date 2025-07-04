@@ -47,6 +47,8 @@ const initialState = {
     dark_mode: false,
   },
 };
+const API_BASE_URL = window.location.origin.replace(":3000", ":5000");
+
 
 export const GlobalContext = createContext(initialState);
 
@@ -72,14 +74,14 @@ useEffect(() => {
       try {
         const token = await getIdToken(auth.currentUser);
         // Fetch transactions
-        const transactionsResponse = await axios.get('http://localhost:5000/api/transactions', {
+        const transactionsResponse = await axios.get(`${API_BASE_URL}/api/transactions`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       
         dispatch({ type: 'SET_TRANSACTIONS', payload: transactionsResponse.data || [] });
 
       //  fetch budget
-        const budgetsResponse = await axios.get('http://localhost:5000/api/budgets', {
+        const budgetsResponse = await axios.get(`${API_BASE_URL}/api/budgets`, {
           headers: { Authorization: `Bearer ${token}` },
           params: { month: state.selectedMonth, year: state.selectedYear },
         });
@@ -87,7 +89,7 @@ useEffect(() => {
         dispatch({ type: 'SET_BUDGETS', payload: budgetsResponse.data || [] });
 
         //  fetch user settings
-        const settingsResponse = await axios.get('http://localhost:5000/api/users/me', {
+        const settingsResponse = await axios.get(`${API_BASE_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -130,7 +132,7 @@ async function addTransaction(transaction) {
   try {
     const token = await getIdToken(auth.currentUser);
     const response = await axios.post(
-      "http://localhost:5000/api/transactions",
+      `${API_BASE_URL}/api/transactions`,
       {
         ...transaction,
         date: new Date().toISOString(),
@@ -149,7 +151,7 @@ async function bulkAddTransactions(transactions) {
   try {
     const token = await getIdToken(auth.currentUser);
     const response = await axios.post(
-      "http://localhost:5000/api/transactions/bulk",
+      `${API_BASE_URL}/api/transactions/bulk`,
       { transactions },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -165,7 +167,7 @@ async function bulkAddTransactions(transactions) {
 
 async function deleteTransaction(id) {
   const token = await getIdToken(auth.currentUser);
-  await axios.delete(`http://localhost:5000/api/transactions/${id}`, {
+  await axios.delete(`${API_BASE_URL}/api/transactions/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   dispatch({ type: "DELETE_TRANSACTION", payload: id });
@@ -177,7 +179,7 @@ async function deleteTransaction(id) {
   async function deleteBudget(id) {
     try {
       const token = await getIdToken(auth.currentUser);
-      await axios.delete(`http://localhost:5000/api/budgets/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/budgets/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       dispatch({ type: "DELETE_BUDGET", payload: id });
@@ -195,14 +197,14 @@ async function deleteTransaction(id) {
     try {
       const token = await getIdToken(auth.currentUser);
       const response = await axios.post(
-        "http://localhost:5000/api/budgets",
+        `${API_BASE_URL}/api/budgets`,
         { category, amount, month, year },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       dispatch({ type: "ADD_BUDGET", payload: response.data });
       // Re-fetch budgets for the current month/year
       const fetchResponse = await axios.get(
-        "http://localhost:5000/api/budgets",
+        `${API_BASE_URL}/api/budgets`,
         {
           headers: { Authorization: `Bearer ${token}` },
           params: { month: state.selectedMonth, year: state.selectedYear },
@@ -225,7 +227,7 @@ async function deleteTransaction(id) {
     try {
       const token = await getIdToken(auth.currentUser);
       const response = await axios.put(
-        "http://localhost:5000/api/users/me",
+        `${API_BASE_URL}/api/users/me`,
         settings,
         {
           headers: { Authorization: `Bearer ${token}` },

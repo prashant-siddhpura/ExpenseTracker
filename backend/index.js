@@ -63,11 +63,15 @@ const formatDateForMySQL = (isoDate) => {
 };
 
 //healthy endpoint for docker
-app.get('/health', (req, res) => {
-  if (connection.state === 'disconnected') {
-    return res.status(503).send('Unhealthy');
+app.get('/health', async (req, res) => {
+  try {
+    const connection = await db.getConnection();
+    await connection.ping();
+    connection.release();
+    res.status(200).send('OK');
+  } catch (err) {
+    res.status(503).send('Unhealthy');
   }
-  res.status(200).send('OK');
 });
 
 // Get user settings
