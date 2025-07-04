@@ -24,27 +24,6 @@ A full-stack expense tracking application built with **React (Vite)** for the fr
 
 ---
 
-## 🧱 Project Structure
-
-```
-ExpenseTracker/
-│
-├── backend/             # Node.js + Express API
-│   ├── config/          # DB config
-│   ├── controllers/     # API logic
-│   ├── models/          # Sequelize models
-│   └── routes/          # Route definitions
-│
-├── frontend/            # React (Vite) app
-│   ├── src/
-│   │   ├── components/  # UI components
-│   │   ├── pages/       # App pages
-│   │   └── services/    # Axios API logic
-│
-├── docker-compose.yml   # Docker multi-service setup
-├── Dockerfile           # Dockerfile for backend
-└── README.md
-```
 
 ---
 
