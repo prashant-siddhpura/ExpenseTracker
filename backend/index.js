@@ -28,11 +28,11 @@ const upload = multer({
 
 // Database connection
 const db = mysql.createPool({
-  host: process.env.VITE_DB_HOST,
-  user: process.env.VITE_DB_USER,
-  password: process.env.VITE_DB_PASSWORD,
-  database: process.env.VITE_DB_DATABASE,
-  port: process.env.VITE_DB_PORT
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT
 });
 
 // Test database connection
@@ -61,6 +61,14 @@ const formatDateForMySQL = (isoDate) => {
   const date = new Date(isoDate);
   return date.toISOString().slice(0, 19).replace('T', ' '); // e.g., "2025-04-06 05:44:58"
 };
+
+//healthy endpoint for docker
+app.get('/health', (req, res) => {
+  if (connection.state === 'disconnected') {
+    return res.status(503).send('Unhealthy');
+  }
+  res.status(200).send('OK');
+});
 
 // Get user settings
 app.get('/api/users/me', verifyToken, async (req, res) => {
