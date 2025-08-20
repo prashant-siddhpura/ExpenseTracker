@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb
+  namespace: dev
+data:
+  init.sql: |
+    -- Create database
+    CREATE DATABASE IF NOT EXISTS `expense_tracker`
+      DEFAULT CHARACTER SET utf8mb4
+      COLLATE utf8mb4_0900_ai_ci;
+    USE `expense_tracker`;
+
+    -- Table: users (moved first to satisfy foreign key dependency)
+    CREATE TABLE IF NOT EXISTS `users` (
+      `user_id` varchar(255) NOT NULL,
+      `display_name` varchar(255) DEFAULT NULL,
+      `dark_mode` tinyint(1) DEFAULT '0',
+      `photo` mediumblob,
+      `preferred_currency` varchar(3) DEFAULT 'INR',
+      PRIMARY KEY (`user_id`),
+      UNIQUE KEY `idx_user_id` (`user_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    -- Table: budgets
+    CREATE TABLE IF NOT EXISTS `budgets` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `user_id` varchar(255) NOT NULL,
+      `category` varchar(50) NOT NULL,
+      `amount` decimal(10,2) NOT NULL,
+      `month` int NOT NULL,
+      `year` int NOT NULL,
+      `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+      `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `unique_budget` (`user_id`,`category`,`month`,`year`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    -- Table: group_expenses (now after users)
+    CREATE TABLE IF NOT EXISTS `group_expenses` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `user_id` varchar(255) NOT NULL,
+      `group_name` varchar(100) NOT NULL,
+      `member_name` varchar(100) NOT NULL,
+      `amount` decimal(10,2) NOT NULL,
+      `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      KEY `user_id` (`user_id`),
+      CONSTRAINT `group_expenses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    -- Table: transactions
+    CREATE TABLE IF NOT EXISTS `transactions` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `text` varchar(255) NOT NULL,
+      `amount` decimal(10,2) NOT NULL,
+      `type` enum('income','expense') NOT NULL,
+      `category` varchar(100) NOT NULL,
+      `date` datetime NOT NULL,
+      `user_id` varchar(255) NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
